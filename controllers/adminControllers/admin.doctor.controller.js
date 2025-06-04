@@ -1,4 +1,3 @@
-import bcryptjs from "bcryptjs";
 import doctorSchema from "../../schema/doctor.schema.js";
 
 export async function addDoctor(req, res, next) {
@@ -9,13 +8,13 @@ export async function addDoctor(req, res, next) {
       error.statusCode = 400;
       throw error;
     }
-    const password = bcryptjs.hashSync("doctor123", 10);
+
     const doctor = await doctorSchema.create({
       name,
       email,
       availableTimeSlot,
       specialization,
-      password,
+
       adminId: req.user.id,
     });
     res.status(200).json({
@@ -34,7 +33,6 @@ export async function getDoctors(req, res, next) {
       specialization = "all",
       timeSlot = "all",
     } = req.query;
-  
 
     // Base query: only doctors for the logged-in admin
     const query = {
@@ -59,7 +57,9 @@ export async function getDoctors(req, res, next) {
       query.availableTimeSlot = timeSlot;
     }
 
-    const doctors = await doctorSchema.find(query);
+    const doctors = await doctorSchema.find(query).sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
@@ -109,7 +109,7 @@ export async function updateDoctor(req, res, next) {
 export async function deleteDoctor(req, res, next) {
   try {
     const { id } = req.params;
-  
+
     const doctor = await doctorSchema.findOneAndDelete({ _id: id });
     if (!doctor) {
       const error = new Error("Doctor not found");
