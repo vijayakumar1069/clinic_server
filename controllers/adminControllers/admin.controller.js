@@ -1,6 +1,7 @@
 import adminSchema from "../../schema/admin.schema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import blacklistedToken from "../../schema/blacklistedToken.js";
 export async function adminLogin(req, res, next) {
   try {
     const { email, password } = req.body;
@@ -43,6 +44,45 @@ export async function adminLogin(req, res, next) {
       token,
     });
   } catch (error) {
+    next(error);
+  }
+}
+
+export async function adminLogout(req, res, next) {
+  try {
+    // Get token from middleware (req.token) and user info (req.user)
+    const token = req.token;
+    const userId = req.user.id;
+
+    if (!token) {
+      const error = new Error("Token not found");
+      error.statusCode = 400;
+      throw error;
+    }
+    if (!userId) {
+      const error = new Error("User ID not found");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // Decode token to get expiration time
+    const decoded = jwt.decode(token);
+    const expiresAt = new Date(decoded.exp * 1000);
+
+    // Add token to blacklist
+    await blacklistedToken.create({
+      token,
+      userId,
+      expiresAt,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    // Even if blacklisting fails, we should not block logout
+    console.error("Error blacklisting token:", error);
     next(error);
   }
 }
