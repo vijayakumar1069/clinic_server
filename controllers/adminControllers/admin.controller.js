@@ -35,7 +35,7 @@ export async function adminLogin(req, res, next) {
         email: currentAdmin.email,
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "12h" }
+      { expiresIn: "1d" }
     );
     res.status(200).json({
       success: true,
@@ -53,6 +53,7 @@ export async function adminLogout(req, res, next) {
     // Get token from middleware (req.token) and user info (req.user)
     const token = req.token;
     const userId = req.user.id;
+    console.log("adminlogout function called ");
 
     if (!token) {
       const error = new Error("Token not found");

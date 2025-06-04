@@ -32,8 +32,9 @@ export const verifyToken = async (req, res, next) => {
         code: "TOKEN_MISSING",
       });
     }
-    const blacklistedToken = await blacklistedToken.findOne({ token });
-    if (blacklistedToken) {
+    console.log(token);
+    const blacklisted = await blacklistedToken.findOne({ token });
+    if (blacklisted) {
       return res.status(401).json({
         success: false,
         message: "Token has been invalidated. Please login again.",

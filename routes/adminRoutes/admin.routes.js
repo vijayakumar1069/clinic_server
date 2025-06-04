@@ -9,6 +9,6 @@ import { hasRole } from "../../middleware/hasRole.js";
 const adminRouter = express.Router();
 
 adminRouter.post("/admin-login", adminLogin);
-adminRouter.post("/admin-logout", verifyToken, hasRole, adminLogout);
+adminRouter.post("/admin-logout", verifyToken, hasRole("admin"), adminLogout);
 
 export default adminRouter;

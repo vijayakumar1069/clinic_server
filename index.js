@@ -18,6 +18,7 @@ app.use(cookieParser());
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 app.use("/api/admin", adminRouter);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
