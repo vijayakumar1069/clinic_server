@@ -32,7 +32,7 @@ export const verifyToken = async (req, res, next) => {
         code: "TOKEN_MISSING",
       });
     }
-    console.log(token);
+   
     const blacklisted = await blacklistedToken.findOne({ token });
     if (blacklisted) {
       return res.status(401).json({

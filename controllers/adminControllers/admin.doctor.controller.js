@@ -34,7 +34,7 @@ export async function getDoctors(req, res, next) {
       specialization = "all",
       timeSlot = "all",
     } = req.query;
-    console.log("get doctors searchTerm", searchTerm, specialization, timeSlot);
+  
 
     // Base query: only doctors for the logged-in admin
     const query = {
@@ -109,7 +109,7 @@ export async function updateDoctor(req, res, next) {
 export async function deleteDoctor(req, res, next) {
   try {
     const { id } = req.params;
-    console.log("delete doctor id", id);
+  
     const doctor = await doctorSchema.findOneAndDelete({ _id: id });
     if (!doctor) {
       const error = new Error("Doctor not found");

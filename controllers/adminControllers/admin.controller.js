@@ -5,7 +5,7 @@ import blacklistedToken from "../../schema/blacklistedToken.js";
 export async function adminLogin(req, res, next) {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
+   
     if (!email || !password) {
       const error = new Error("Email and password are required");
       error.statusCode = 400;
@@ -53,7 +53,7 @@ export async function adminLogout(req, res, next) {
     // Get token from middleware (req.token) and user info (req.user)
     const token = req.token;
     const userId = req.user.id;
-    console.log("adminlogout function called ");
+   
 
     if (!token) {
       const error = new Error("Token not found");
