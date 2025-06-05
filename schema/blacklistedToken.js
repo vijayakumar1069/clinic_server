@@ -18,6 +18,9 @@ const BlacklistedTokenSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+},
+{
+  timestamps: true,
 });
 
 // Auto-delete expired tokens from database

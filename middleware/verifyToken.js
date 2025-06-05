@@ -32,7 +32,7 @@ export const verifyToken = async (req, res, next) => {
         code: "TOKEN_MISSING",
       });
     }
-   
+
     const blacklisted = await blacklistedToken.findOne({ token });
     if (blacklisted) {
       return res.status(401).json({
@@ -46,7 +46,7 @@ export const verifyToken = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = decoded;
     req.token = token; // Store original token for logout
-
+    console.log("token", token);
     next();
   } catch (error) {
     // Handle specific JWT errors
